@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kyungseo.poc.demo.jwt.persistence.mapper.SecuredSampleMapper">
+
+    <resultMap id="baseResultMap" type="kyungseo.poc.demo.jwt.persistence.model.SecuredSample">
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="member_name" jdbcType="VARCHAR" property="membername" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="age" jdbcType="INTEGER" property="age" />
+        <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+        <result column="country" jdbcType="VARCHAR" property="country" />
+        <result column="birth_date" jdbcType="VARCHAR" property="birthdate" />
+        <result column="enabled" jdbcType="BIT" property="enabled" />
+        <result column="is_using_2fa" jdbcType="BIT" property="isUsing2FA" />
+        <result column="secret" jdbcType="VARCHAR" property="secret" />
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+        <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    </resultMap>
+
+    <sql id="baseColumnList" >
+        id
+        , member_name
+        , email
+        , password
+        , age
+        , phone_number
+        , country
+        , birth_date
+        , enabled
+        , is_using_2fa
+        , secret
+        , created_date
+        , modified_date
+    </sql>
+
+    <select id="selectAll" resultMap="baseResultMap">
+        SELECT /* AdmUserMapper.selectAll */
+        <include refid="baseColumnList" />
+        FROM user_account
+    </select>
+
+    <select id="selectList" parameterType="kyungseo.poc.framework.payload.paging.PagingRequestDto" resultMap="baseResultMap">
+        SELECT
+            <include refid="baseColumnList" />
+        FROM (
+            SELECT
+            <include refid="baseColumnList" />
+            FROM user_account
+            WHERE 1 = 1
+            <if test="searchType != null and searchType != ''">
+                <choose>
+                    <when test="searchType eq 'n'.toString()">
+                        <if test="searchKeyword neq null and searchKeyword neq ''">
+                            and member_name like CONCAT('%', #{searchKeyword}, '%')
+                        </if>
+                    </when>
+                    <when test="searchType eq 'e'.toString()">
+                        <if test="searchKeyword neq null and searchKeyword neq ''">
+                            and email like CONCAT('%', #{searchKeyword}, '%')
+                        </if>
+                    </when>
+                </choose>
+            </if>
+            LIMIT #{limit} OFFSET #{offset}
+        )
+    </select>
+
+    <select id="totalCount" parameterType="kyungseo.poc.framework.payload.paging.PagingRequestDto" resultType="Integer">
+        SELECT /* AdmUserMapper.totalCount */
+             count(1) AS tcount
+        FROM user_account
+        WHERE 1 = 1
+        <if test="searchType != null and searchType != ''">
+            <choose>
+                <when test="searchType eq 'n'.toString()">
+                    <if test="searchKeyword neq null and searchKeyword neq ''">
+                        and member_name like CONCAT('%', #{searchKeyword}, '%')
+                    </if>
+                </when>
+                <when test="searchType eq 'e'.toString()">
+                    <if test="searchKeyword neq null and searchKeyword neq ''">
+                        and email like CONCAT('%', #{searchKeyword}, '%')
+                    </if>
+                </when>
+            </choose>
+        </if>
+    </select>
+
+    <select id="selectOne" parameterType="long" resultMap="baseResultMap">
+        SELECT /* AdmUserMapper.selectOne */
+        <include refid="baseColumnList" />
+        FROM user_account
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByEmail" parameterType="string" resultMap="baseResultMap">
+        SELECT /* AdmUserMapper.selectByEmail */
+        <include refid="baseColumnList" />
+        FROM user_account
+        WHERE email = #{email}
+    </select>
+
+    <insert id="insert" parameterType="kyungseo.poc.demo.jwt.persistence.model.SecuredSample">
+        INSERT /* AdmUserMapper.insert */
+        INTO user_account (
+              member_name
+            , email
+            , password
+            , age
+            , phone_number
+            , country
+            , birth_date
+            , enabled
+            , is_using_2fa
+            , secret
+            , created_date
+        ) VALUES (
+              #{membername}
+            , #{email}
+            , #{password}
+            , #{age}
+            , #{phoneNumber}
+            , #{country}
+            , #{birthdate}
+            , #{enabled}
+            , #{isUsing2FA}
+            , #{secret}
+            , NOW()
+        )
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        INSERT /* AdmUserMapper.batchInsert */
+        INTO user_account (
+              member_name
+            , email
+            , password
+            , age
+            , phone_number
+            , country
+            , birth_date
+            , enabled
+            , is_using_2fa
+            , secret
+            , created_date
+        ) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            ( #{membername}
+            , #{email}
+            , #{password}
+            , #{age}
+            , #{phoneNumber}
+            , #{country}
+            , #{birthdate}
+            , #{enabled}
+            , #{isUsing2FA}
+            , #{secret}
+            , NOW()
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="kyungseo.poc.demo.jwt.persistence.model.SecuredSample">
+        UPDATE /* AdmUserMapper.update */
+        user_account
+        SET
+            <if test="membername != null and membername != ''">
+                member_name = #{membername}, <!-- 이름 주의! -->
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="age != null and age != ''">
+                age = #{age},
+            </if>
+            <if test="phoneNumber != null and phoneNumber != ''">
+                phone_number = #{phoneNumber},
+            </if>
+            <if test="country != null and country != ''">
+                country = #{country},
+            </if>
+            <if test="birthdate != null and birthdate != ''">
+                birth_date = #{birthdate},
+            </if>
+            <if test="enabled != null and enabled != ''">
+                enabled = #{enabled},
+            </if>
+            <if test="isUsing2FA != null and isUsing2FA != ''">
+                is_using_2fa = #{isUsing2FA},
+            </if>
+            modified_date = NOW()
+         WHERE id = #{id}
+    </update>
+
+    <update id="batchUpdate" parameterType="list">
+        UPDATE /* AdmUserMapper.batchUpdate */
+        user_account
+        <trim prefix="SET" suffixOverrides=",">
+            <trim prefix="membername=case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.membername}
+                </foreach>
+            </trim>
+            <trim prefix="email=case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.email}
+                </foreach>
+            </trim>
+            <trim prefix="age=case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.age=}
+                </foreach>
+            </trim>
+            <trim prefix="phoneNumber=case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.phoneNumber}
+                </foreach>
+            </trim>
+            <trim prefix="country=case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.country}
+                </foreach>
+            </trim>
+            <trim prefix="birthdate=case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.birthdate}
+                </foreach>
+            </trim>
+            <trim prefix="enabled=case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.enabled}
+                </foreach>
+            </trim>
+            <trim prefix="isUsing2FA=case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.isUsing2FA}
+                </foreach>
+            </trim>
+            <trim prefix="modified_date=case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then NOW()
+                </foreach>
+            </trim>
+        </trim>
+        WHERE id IN
+        <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE /* AdmUserMapper.delete */
+        FROM user_account
+        WHERE id = #{id}
+    </delete>
+
+    <update id="batchDelete" parameterType="list">
+        DELETE /* AdmUserMapper.batchDelete */
+        FROM user_account
+        WHERE id IN
+        <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="batchDeleteUserRoles" parameterType="list">
+        DELETE /* AdmUserMapper.batchDeleteUserRoles */
+        FROM users_roles
+        WHERE id IN
+        <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+</mapper>

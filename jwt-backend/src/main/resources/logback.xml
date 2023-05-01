@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOG_PATH" value="./logs" />
+
+    <property name="LOG_PATTERN_SIMPLE"
+              value="[%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
+
+    <property name="LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35} - %msg%n" />
+
+    <!-- Appenders -->
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN_SIMPLE}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="ROLLING_DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 파일경로 설정 -->
+        <file>${LOG_PATH}/debug.log</file>
+
+        <!-- Rolling 정책 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 일자별 로그파일 최대 보관주기(일) -->
+            <maxHistory>60</maxHistory>
+            <!-- 파일 쓰기가 종료된 log 파일명의 패턴을 지정, (.gz,.zip 등을 넣으면 자동 일자별 로그파일 압축) -->
+            <fileNamePattern>${LOG_PATH}/debug.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 파일당 최고 용량 -->
+                <maxFileSize>200MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+        <!-- 출력패턴 설정-->
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="ROLLING_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 에러 로그 필터링 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>error</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!-- 파일경로 설정 -->
+        <file>${LOG_PATH}/error.log</file>
+        <!-- Rolling 정책 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 일자별 로그파일 최대 보관주기(일) -->
+            <maxHistory>60</maxHistory>
+            <!-- 파일 쓰기가 종료된 log 파일명의 패턴을 지정, (.gz,.zip 등을 넣으면 자동 일자별 로그파일 압축) -->
+            <fileNamePattern>${LOG_PATH}/error.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 파일당 최고 용량 -->
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <!-- 출력패턴 설정-->
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- Logger: org.springframework -->
+    <logger name="org.springframework" level="WARN" additivity="false">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="ROLLING_DEBUG"/>
+        <appender-ref ref="ROLLING_ERROR" />
+    </logger>
+
+    <!-- Logger: org.springframework.web -->
+    <logger name="org.springframework.web" level="WARN" additivity="false">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="ROLLING_DEBUG"/>
+        <appender-ref ref="ROLLING_ERROR" />
+    </logger>
+
+    <!-- Logger: org.springframework.web.servlet.mvc -->
+    <logger name="org.springframework.web.servlet.mvc" level="WARN" additivity="false">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="ROLLING_DEBUG"/>
+        <appender-ref ref="ROLLING_ERROR" />
+    </logger>
+
+    <!-- Logger: org.hibernate -->
+    <logger name="org.hibernate.SQL" level="debug" appender-ref="STDOUT"/>
+    <logger name="org.hibernate.tool.hbm2ddl" level="debug" appender-ref="STDOUT"/>
+    <logger name="org.hibernate.type" level="trace" appender-ref="STDOUT"/>
+    <logger name="org.hibernate.stat" level="debug" appender-ref="STDOUT"/>
+    <logger name="org.hibernate.type.BasicTypeRegistry" level="warn" appender-ref="STDOUT"/>
+
+    <!-- Logger: kyungseo.poc -->
+    <logger name="kyungseo.poc" level="debug" additivity="false">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="ROLLING_DEBUG"/>
+        <appender-ref ref="ROLLING_ERROR" />
+    </logger>
+
+    <!-- Logger: Root -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="ROLLING_DEBUG"/>
+        <appender-ref ref="ROLLING_ERROR" />
+    </root>
+
+</configuration>

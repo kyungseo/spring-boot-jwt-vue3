@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!--
+MyBatis Configuration | 2015-10-28, 박경서(Kyungseo.Park@gmail.com)
+  - http://mybatis.org/mybatis-3/configuration.html
+-->
+
+<configuration>
+
+    <!-- changes from the defaults -->
+    <settings>
+        <!-- true | false (default: true)
+          설정에서 각 매퍼에 설정된 캐시를 전역적으로 사용할지 말지에 대한 여부
+        -->
+        <setting name="cacheEnabled" value="false"/>
+
+        <!-- true | false (default: false)
+          지연로딩을 사용할지에 대한 여부. 사용하지 않는다면 모두 즉시 로딩할 것이다.
+          이 값은 fetchType 속성을 사용해서 대체할 수 있다.
+        <setting name="lazyLoadingEnabled" value="true"/>
+        -->
+
+        <!-- true | false (default: false)
+          활성화 상태로 두게 되면 지연로딩 프로퍼티를 가진 객체는 호출에 따라 로드될 것이다.
+          반면에 개별 프로퍼티는 요청할때 로드된다.
+        <setting name="aggressiveLazyLoading" value="false"/>
+        -->
+
+        <!-- true | false (default: true)
+          한개의 구문에서 여러개의 ResultSet을 허용할지의 여부
+          (드라이버가 해당 기능을 지원해야 함)
+        <setting name="multipleResultSetsEnabled" value="true"/>
+        -->
+
+        <!-- true | false (default: true)
+          칼럼명 대신에 칼럼라벨을 사용. 드라이버마다 조금 다르게 작동한다.
+          문서와 간단한 테스트를 통해 실제 기대하는 것처럼 작동하는지 확인해야 한다.
+        <setting name="useColumnLabel" value="true" />
+        -->
+
+        <!-- true | false (default: false)
+          생성키에 대한 JDBC 지원을 허용. 지원하는 드라이버가 필요하다.
+          true로 설정하면 생성키를 강제로 생성한다.
+          일부 드라이버(예를들면, Derby)에서는 이 설정을 무시한다.
+        <setting name="useGeneratedKeys" value="true" />
+        -->
+
+        <!-- NONE | PARTIAL | FULL (default: PARTIAL)
+          마이바티스가 칼럼을 필드/프로퍼티에 자동으로 매핑할지와 방법에 대해 명시.
+          PARTIAL은 간단한 자동매핑만 할뿐 내포된 결과에 대해서는 처리하지 않는다.
+          FULL은 처리가능한 모든 자동매핑을 처리한다.
+
+          단, FULL 을 사용할때 자동매핑은 조인결과나 같은 레코드의 여러가지
+          다른 엔터티를 가져올때 예상치 못한 문제를 야기할 수 있다.
+          ex) Blog 와 Author 는 자동매핑으로 처리하지만 Author는 id 프로퍼티를
+              가지고 ResultSet은 id 칼럼을 가진다. 그래서 기대한 것과는 달리
+              저자(Author)의 id는 블로그(Blog)의 id로 채워질것이다.
+              FULL 는 이런 위험을 가진다
+        <setting name="autoMappingBehavior" value="PARTIAL"/>
+        -->
+
+        <!-- SIMPLE | REUSE | BATCH (default: SIMPLE)
+          디폴트 실행자(executor) 설정. SIMPLE 실행자는 특별히 하는 것이 없다.
+          REUSE 실행자는 PreparedStatement를 재사용한다.
+          BATCH 실행자는 구문을 재사용하고 수정을 배치처리한다.
+        <setting name="defaultExecutorType" value="REUSE" />
+        -->
+
+        <!-- 양수 (default: 설정되지 않음(null))
+          데이터베이스로의 응답을 얼마나 오래 기다릴지를 판단하는 타임아웃을 설정
+        <setting name="defaultStatementTimeout" value="25"/>
+        -->
+
+        <!-- 양수 (default: 설정되지 않음(null))
+          조회결과를 가져올때 가져올 데이터 크기를 제어하는 용도로 드라이버에
+          힌트를 설정 이 파라미터값은 쿼리 설정으로 변경할 수 있다.
+        <setting name="defaultFetchSize" value="100"/>
+        -->
+
+        <!-- true | false (default: false)
+          중첩구문내 RowBound사용을 허용
+        <setting name="safeRowBoundsEnabled" value="false"/>
+        -->
+
+        <!-- true | false (default: false)
+          전통적인 데이터베이스 칼럼명 형태인 A_COLUMN을 CamelCase형태의
+          자바 프로퍼티명 형태인 aColumn으로 자동으로 매핑하도록 함
+        -->
+        <!--
+          현재 프로젝트(CKCI-OMS)에서는 VO가 아닌 Map을 사용해 Data를 송/수신하고
+          있다. 따라서 Databse의 Column명을 VO의 attribute명으로 매핑할 필요가 없다.
+          만약, camel case의 attrubute를 사용하느 VO를 사용하는 경우 true로
+          설정 하도록 한다. - 2015-05-20, 박경서(Kyungseo.Park@gmail.com)
+        <setting name="mapUnderscoreToCamelCase" value="false"/>
+        -->
+
+        <!-- SESSION | STATEMENT (default: SESSION) ★
+          마이바티스는 순환참조를 막거나 반복된 쿼리의 속도를 높히기 위해 로컬캐시를
+          사용한다. 디폴트 설정인 SESSION을 사용해서 동일 세션의 모든 쿼리를 캐시한다.
+          localCacheScope=STATEMENT 로 설정하면 로컬 세션은 구문 실행할때만
+          사용하고 같은 SqlSession에서 두개의 다른 호출사이에는 데이터를 공유하지
+          않는다.
+        -->
+        <!--
+          KB 생명 SFA(스타 Dream) 프로젝트 시에
+          D'Amo 암/복호화 이슈로 인하여 STATEMENT로 변경해서 해결한 바 있음!
+          - 2015-05-20, 박경서(Kyungseo.Park@gmail.com)
+        <setting name="localCacheScope" value="SESSION" />
+        -->
+
+        <!-- JdbcType Enum. 대부분은 NULL, VARCHAR 나 OTHER 를 공통적으로 사용
+        (default: OTHER) ★
+          JDBC타입을 파라미터에 제공하지 않을때 null값을 처리한 JDBC타입을 명시한다.
+          일부 드라이버는 칼럼의 JDBC타입을 정의하도록 요구하지만
+          대부분은 NULL, VARCHAR 나 OTHER 처럼 일반적인 값을 사용해서 동작한다.
+        -->
+        <!--
+          Null 파라미터 대응
+          - 2015-05-20, 박경서(Kyungseo.Park@gmail.com)
+        <setting name="jdbcTypeForNull" value="NULL"/>
+        -->
+
+        <!-- 메소드 이름을 나열하고 여러개일 경우 콤마(,) 로 구분
+        (default: equals,clone,hashCode,toString)
+          지연로딩을 야기하는 객체의 메소드를 명시
+        <setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString"/>
+        -->
+
+        <!-- true | false (default: false) ★
+          가져온 값이 null일때 setter나 맵의 put 메소드를 호출할지를 명시
+          Map.keySet() 이나 null값을 초기화할때 유용하다.
+          int, boolean 등과 같은 원시타입은 null을 설정할 수 없다는 점은 알아두면 좋다.
+        -->
+        <!--
+          false일 경우 값이 null인 column에 대해서 result에 set하지 않는다.
+          이 경우, 시스템을 XPlatform 또는 Nexacro 등의 UI Tool을 사용해 구현하고
+          있고 useClientLayout이 false로 설정되어 있다면 문제가 생길 수 있다.
+          따라서 위와 같은 RIA(X-Internet) 환경이라면 다음 값을 true로 설정할 것을
+          권장한다. - 2015-11-16, 박경서(Kyungseo.Park@gmail.com)
+        <setting name="callSettersOnNulls" value="true"/>
+        -->
+
+        <!--
+        <setting name="logImpl" value="SLF4J"/>
+        -->
+
+        <!-- CGLIB | JAVASSIST
+        (default: JAVASSIST (마이바티스 3.3과 이상의 버전))
+          마이바티스가 지연로딩을 처리할 객체를 생성할 때 사용할 프록시 툴을 명시
+        <setting name="proxyFactory" value="JAVASSIST"/>
+        -->
+
+    </settings>
+
+	<typeAliases>
+		<typeAlias alias="Integer" type="java.lang.Integer" />
+		<typeAlias alias="Long" type="java.lang.Long" />
+		<typeAlias alias="HashMap" type="java.util.HashMap" />
+		<typeAlias alias="LinkedHashMap" type="java.util.LinkedHashMap" />
+		<typeAlias alias="ArrayList" type="java.util.ArrayList" />
+		<typeAlias alias="LinkedList" type="java.util.LinkedList" />
+	</typeAliases>
+
+    <!--
+    https://mybatis.github.io/mybatis-3/ko/configuration.html#plugins
+    http://mybatis.github.io/mybatis-3/configuration.html#plugins
+    -->
+    <!--
+    <plugins>
+        <plugin interceptor="kyungseo.poc.simple.web.appcore.data.mybatis.interceptor.ResultSetInterceptor" />
+    </plugins>
+    -->
+
+    <!--
+    <typeHandlers>
+        <typeHandler handler="kyungseo.poc.simple.web.appcore.data.mybatis" javaType="String" />
+    </typeHandlers>
+    -->
+
+</configuration>

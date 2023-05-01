@@ -1,0 +1,68 @@
+{
+  "name": "vue-frontend",
+  "version": "0.1.0",
+  "author": {
+    "name": "Kyungseo Park",
+    "email": "Kyungseo.Park@gmail.com",
+    "url": "https://github.com/kyungseo"
+  },
+  "description": "KYUNGSEO.PoC - Spring Boot, JWT and Vue.js 3 Sample Project",
+  "license": "Apache 2.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit --coverage",
+    "test:e2e": "vue-cli-service test:e2e",
+    "lint": "vue-cli-service lint",
+    "clean": "rm -rf node_modules target",
+    "test": "vue-cli-service test:unit && vue-cli-service test:e2e"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/vue-fontawesome": "^3.0.0-4",
+    "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
+    "core-js": "^3.6.5",
+    "device-uuid": "^1.0.4",
+    "jquery": "^3.6.0",
+    "popper.js": "^1.16.1",
+    "vee-validate": "^4.4.7",
+    "vue": "^3.0.0",
+    "vue-good-table-next": "^0.2.1",
+    "vue-moment": "^4.1.0",
+    "vue-router": "^4.0.10",
+    "vuex": "^4.0.2",
+    "yup": "^0.32.9"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^7.0.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}

@@ -1,0 +1,54 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>spring-boot-jwt-vue3</artifactId>
+    <groupId>kyungseo.poc</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>KYUNGSEO.PoC - Spring Boot, JWT and Vue.js Sample Project</description>
+    <url>https://github.com/kyungseo/spring-boot-jwt-vue3</url>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.8</version>
+        <relativePath />
+    </parent>
+
+    <developers>
+        <developer>
+            <id>kyungseo</id>
+            <name>Kyungseo Park</name>
+            <email>Kyungseo.Park@gmail.com</email>
+            <roles>
+                <role>Architect</role>
+                <role>Developer</role>
+            </roles>
+            <timezone>GMT+9</timezone>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <main.basedir>${project.basedir}</main.basedir>
+        <default.encoding>UTF-8</default.encoding>
+        <project.build.sourceEncoding>${default.encoding}</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>${default.encoding}</project.reporting.outputEncoding>
+        <java.version>11</java.version>
+        <maven.test.skip>true</maven.test.skip>
+    </properties>
+
+    <modules>
+        <module>jwt-backend</module>
+        <module>vue3-frontend</module>
+    </modules>
+
+</project>
